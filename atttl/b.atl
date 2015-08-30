@@ -1,0 +1,15 @@
+module testModels;
+create OUT: BPMN2 from IN: BPMN2;
+
+rule def2mod {
+	from
+		b: BPMN2!Definitions
+	to
+		m: BPMN2!Process-- (
+		--	connectors <- b.connectors
+		--)
+	do {
+		b.debug('def to mod');
+	--	m.debug('def to mod ' + b.connectors); 
+	}
+}

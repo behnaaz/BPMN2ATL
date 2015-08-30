@@ -47,7 +47,7 @@
 		<constant value="NTransientLinkSet;.getLinksByRule(S):QNTransientLink;"/>
 		<constant value="A.__applydef2mod(NTransientLink;):V"/>
 		<constant value="__matchdef2mod"/>
-		<constant value="Definitions"/>
+		<constant value="Task"/>
 		<constant value="BPMN20"/>
 		<constant value="IN"/>
 		<constant value="MMOF!Classifier;.allInstancesFrom(S):QJ"/>
@@ -60,27 +60,18 @@
 		<constant value="reo"/>
 		<constant value="NTransientLink;.addTargetElement(SJ):V"/>
 		<constant value="NTransientLinkSet;.addLink2(NTransientLink;B):V"/>
-		<constant value="10:6-10:49"/>
+		<constant value="9:3-9:16"/>
 		<constant value="__applydef2mod"/>
 		<constant value="NTransientLink;"/>
 		<constant value="NTransientLink;.getSourceElement(S):J"/>
 		<constant value="NTransientLink;.getTargetElement(S):J"/>
 		<constant value="3"/>
-		<constant value="rootElements"/>
-		<constant value="connectors"/>
 		<constant value="def to mod "/>
-		<constant value="J.+(J):J"/>
 		<constant value="J.debug(J):J"/>
-		<constant value="10:34-10:35"/>
-		<constant value="10:34-10:48"/>
-		<constant value="10:20-10:48"/>
 		<constant value="12:9-12:10"/>
 		<constant value="12:17-12:30"/>
-		<constant value="12:31-12:32"/>
-		<constant value="12:31-12:45"/>
-		<constant value="12:17-12:45"/>
-		<constant value="12:9-12:47"/>
-		<constant value="11:5-13:6"/>
+		<constant value="12:9-12:32"/>
+		<constant value="11:2-13:6"/>
 		<constant value="link"/>
 	</cp>
 	<field name="1" type="2"/>
@@ -284,38 +275,23 @@
 			<call arg="63"/>
 			<store arg="64"/>
 			<load arg="64"/>
-			<dup/>
-			<getasm/>
-			<load arg="29"/>
-			<get arg="65"/>
-			<call arg="30"/>
-			<set arg="66"/>
 			<pop/>
 			<load arg="64"/>
-			<push arg="67"/>
-			<load arg="29"/>
-			<get arg="65"/>
-			<call arg="68"/>
-			<pcall arg="69"/>
+			<push arg="65"/>
+			<pcall arg="66"/>
 		</code>
 		<linenumbertable>
-			<lne id="70" begin="11" end="11"/>
-			<lne id="71" begin="11" end="12"/>
-			<lne id="72" begin="9" end="14"/>
-			<lne id="59" begin="8" end="15"/>
-			<lne id="73" begin="16" end="16"/>
-			<lne id="74" begin="17" end="17"/>
-			<lne id="75" begin="18" end="18"/>
-			<lne id="76" begin="18" end="19"/>
-			<lne id="77" begin="17" end="20"/>
-			<lne id="78" begin="16" end="21"/>
-			<lne id="79" begin="16" end="21"/>
+			<lne id="59" begin="8" end="9"/>
+			<lne id="67" begin="10" end="10"/>
+			<lne id="68" begin="11" end="11"/>
+			<lne id="69" begin="10" end="12"/>
+			<lne id="70" begin="10" end="12"/>
 		</linenumbertable>
 		<localvariabletable>
-			<lve slot="3" name="54" begin="7" end="21"/>
-			<lve slot="2" name="52" begin="3" end="21"/>
-			<lve slot="0" name="17" begin="0" end="21"/>
-			<lve slot="1" name="80" begin="0" end="21"/>
+			<lve slot="3" name="54" begin="7" end="12"/>
+			<lve slot="2" name="52" begin="3" end="12"/>
+			<lve slot="0" name="17" begin="0" end="12"/>
+			<lve slot="1" name="71" begin="0" end="12"/>
 		</localvariabletable>
 	</operation>
 </asm>

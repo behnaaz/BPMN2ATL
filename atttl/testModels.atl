@@ -1,14 +1,14 @@
--- @path reo=/Reo/reo.ecore
--- @path BPMN20=/BPMN2/BPMN20.ecore
-module testModels;
+module testModels;-- @path reo=/atttl/Reo/reo.ecore
+-- @path BPMN20=/atttl/BPMN2/BPMN20.ecore
 create OUT: reo from IN: BPMN20;
 
 rule def2mod {
-    from
-    	b: BPMN20!Definitions
-    to
-    	m: reo!Module(connectors <- b.rootElements)
-    do {
-        m.debug('def to mod '+b.rootElements);
+	from
+		b: BPMN20!Task
+	to
+		m: reo!Module --(connectors <- b.rootElements)
+	
+	do {
+        m.debug('def to mod ');--+b.rootElements);
     }
 }
