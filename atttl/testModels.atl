@@ -2,13 +2,126 @@ module testModels;-- @path reo=/atttl/Reo/reo.ecore
 -- @path BPMN20=/atttl/BPMN2/BPMN20.ecore
 create OUT: reo from IN: BPMN20;
 
+helper context BPMN20!FlowElement def: isExpanded(): Boolean =
+	if (self.oclIsKindOf(BPMN20!SubProcess)) then
+		self.flowElements -> size() = 0
+	else
+		false
+	endif;
+
 rule def2mod {
 	from
-		b: BPMN20!Task
+		b: BPMN20!Definitions(true)
 	to
-		m: reo!Module --(connectors <- b.rootElements)
+		m: reo!Module(			connectors <- 
+			--b.rootElements		
+		BPMN20!Process.allInstances()	
+		)
+	do {
+		b.debug('definition to module > ' + BPMN20!Process.allInstances()); 
+	}
+}
+
+rule mapProcess {
+	from
+		proc: BPMN20!Process
+	to
+		conn: reo!Connector-----(
+			------nodes <- proc.flowElements
+		--	name <- proc.name,
+		--	nodes <- proc.flowElements -> select(e | e.oclIsTypeOf(BPMN20!Activity) or e.
+		--			oclIsTypeOf(BPMN20!Event) or e.oclIsTypeOf(BPMN20!Gateway)),
+		--	primitives <- proc.flowElements -> select(e | e.
+		--			oclIsTypeOf(BPMN20!SequenceFlow) or (
+	     --   	e.oclIsKindOf(BPMN20!SubProcess) and not e.isExpanded())),
+		--	subConnectors <- proc.flowElements -> select(e | e.isExpanded())
+		-------)
+	do {
+		proc.debug('process to connector ' + proc.name + proc.flowElements); 
+		proc.debug( BPMN20!Process.allInstances());
+	}
+}
+
+rule x {
+	from
+		b: BPMN20!FlowNode (
+			not b.oclIsKindOf(BPMN20!SubProcess)
+		)
+	to
+		r: reo!Node (
+			name <- b.name
+		)
+	do {
+		r.debug('ffrrr ' + b.name); 
+	}
+}
+
+rule y {
+	from
+		b: BPMN20!SequenceFlow
+	to
+		r: reo!Sync (
+			sourceEnds <- s,
+			sinkEnds <- t
+		),
+		--, name <- b.sourceRef.name + ' to ' +b.targetRef.name),
+		s: reo!SourceEnd (
+			node <- b.sourceRef
+		),
+		t: reo!SinkEnd (
+			node <- b.targetRef
+		)
+	do {
+		r.debug('sq ' + b.sourceRef.name + ' to ' + b.targetRef.name); 
+	}
+}
+
+rule subprcs2cnn {
+	from
+		b: BPMN20!SubProcess (
+			b -> isExpanded()
+		)
+	to
+		m: reo!Connector --(connectors <- b.rootElements)
 	
 	do {
-        m.debug('def to mod ');--+b.rootElements);
-    }
+		m.debug('subprc to cnn ' + b.name); 
+	}
+}
+
+rule notexsubprcs2cnn {
+	from
+		b: BPMN20!SubProcess (
+			not b -> isExpanded()
+		)
+	to
+		r: reo!LossySync (
+			sourceEnds <- s,
+			sinkEnds <- t
+		),
+		--, name <- b.sourceRef.name + ' to ' +b.targetRef.name),
+		s: reo!SourceEnd,
+		--(node <- b.sourceRef),
+		t: reo!SinkEnd --(node <- b.targetRef)
+	
+	do {
+		r.debug('not ex subprc to cnn ' + b.name); 
+	}
+}
+
+rule startevent {
+	from
+		b: BPMN20!StartEvent
+	to
+		r: reo!Node(name <- 'start')
+	do {
+		r.debug('start event ' + b.name); 
+	}	
+}
+
+rule endevent {
+	from
+		b: BPMN20!EndEvent
+	to
+		r: reo!Node(name <- 'end')
 }
