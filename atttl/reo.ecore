@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="reo" nsURI="http://www.cwi.nl/reo" nsPrefix="reo">
+  <eClassifiers xsi:type="ecore:EClass" name="Composite" abstract="true" eSuperTypes="#//Nameable">
+    <eOperations name="getConnectors" upperBound="-1" eType="#//Connector"/>
+    <eOperations name="getComponents" upperBound="-1" eType="#//Component"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Module" eSuperTypes="#//Composite #//PropertyHolder">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectors" upperBound="-1"
+        eType="#//Connector" containment="true" eOpposite="#//Connector/module"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
+        eType="#//Component" containment="true" eOpposite="#//Component/module"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reconfRules" upperBound="-1"
+        eType="#//ReconfRule" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activeReconfRule" eType="#//ReconfRule"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Network" eSuperTypes="#//Composite #//animation/Animatable">
+    <eOperations name="update"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
+        eType="#//Component"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectors" upperBound="-1"
+        eType="#//Connector"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="colouringEngine" eType="#//colouring/ColouringEngine"
+        transient="true" defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connector" eSuperTypes="#//Nameable #//animation/Animatable #//Reconfigurable #//PropertyHolder">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//Node" containment="true" eOpposite="#//Node/connector"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="primitives" upperBound="-1"
+        eType="#//Primitive" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subConnectors" upperBound="-1"
+        eType="#//Connector" containment="true" eOpposite="#//Connector/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="module" eType="#//Module"
+        eOpposite="#//Module/connectors"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//Connector"
+        eOpposite="#//Connector/subConnectors"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="colouringEngine" eType="#//colouring/ColouringEngine"
+        transient="true" defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Component" eSuperTypes="#//Primitive #//Nameable #//CustomPrimitive">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="module" eType="#//Module"
+        eOpposite="#//Module/components"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" eSuperTypes="#//Connectable #//Nameable #//animation/Animatable #//Delayable #//Reconfigurable #//PropertyHolder">
+    <eOperations name="isSourceNode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isSinkNode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isMixedNode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connector" eType="#//Connector"
+        eOpposite="#//Connector/nodes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceEnds" upperBound="-1"
+        eType="#//SourceEnd" eOpposite="#//SourceEnd/node"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sinkEnds" upperBound="-1"
+        eType="#//SinkEnd" eOpposite="#//SinkEnd/node"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//NodeType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hide" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        volatile="true" transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Primitive" abstract="true" eSuperTypes="#//Connectable #//animation/Animatable #//Delayable #//Reconfigurable #//PropertyHolder">
+    <eOperations name="initializeEnds"/>
+    <eOperations name="disconnectEnds"/>
+    <eOperations name="isConnected" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="isSynchronous" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceEnds" upperBound="-1"
+        eType="#//SourceEnd" containment="true" eOpposite="#//SourceEnd/primitive"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sinkEnds" upperBound="-1"
+        eType="#//SinkEnd" containment="true" eOpposite="#//SinkEnd/primitive"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimitiveEnd" abstract="true" eSuperTypes="#//Nameable #//PropertyHolder">
+    <eOperations name="getNode" eType="#//Node"/>
+    <eOperations name="setNode">
+      <eParameters name="node" eType="#//Node"/>
+    </eOperations>
+    <eOperations name="getPrimitive" eType="#//Primitive"/>
+    <eOperations name="setPrimitive">
+      <eParameters name="primitive" eType="#//Primitive"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SourceEnd" eSuperTypes="#//PrimitiveEnd">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="node" eType="#//Node" eOpposite="#//Node/sourceEnds"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="primitive" eType="#//Primitive"
+        eOpposite="#//Primitive/sourceEnds"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SinkEnd" eSuperTypes="#//PrimitiveEnd">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="node" eType="#//Node" eOpposite="#//Node/sinkEnds"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="primitive" eType="#//Primitive"
+        eOpposite="#//Primitive/sinkEnds"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hidden" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connectable" abstract="true" interface="true">
+    <eOperations name="getSourceEnds" upperBound="-1" eType="#//SourceEnd"/>
+    <eOperations name="getSinkEnds" upperBound="-1" eType="#//SinkEnd"/>
+    <eOperations name="getAllEnds" upperBound="-1" eType="#//PrimitiveEnd"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Delayable" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrivalRate" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="processingDelay" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Nameable" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataAware" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyHolder" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//Property" containment="true" eKeys="#//Property/key"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CustomPrimitive" abstract="true" interface="true"
+      eSuperTypes="#//Connectable #//PropertyHolder">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeURI" eType="#//URI"
+        volatile="true" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resolved" eType="#//CustomPrimitive"
+        transient="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="foregroundColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        volatile="true" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="synchronous" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Reconfigurable" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reconfActions" upperBound="-1"
+        eType="#//ReconfAction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReconfRule" eSuperTypes="#//Nameable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exported" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReconfAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rule" eType="#//ReconfRule"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//ReconfType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="NodeType">
+    <eLiterals name="REPLICATE" literal="replicate"/>
+    <eLiterals name="ROUTE" value="1" literal="route"/>
+    <eLiterals name="JOIN" value="2" literal="join"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ReconfType">
+    <eLiterals name="NONE" literal="none"/>
+    <eLiterals name="CREATE" value="1" literal="create"/>
+    <eLiterals name="DELETE" value="2" literal="delete"/>
+    <eLiterals name="FORBID" value="3" literal="forbid"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="URI" instanceClassName="org.eclipse.emf.common.util.URI"/>
+  <eSubpackages name="channels" nsURI="http://www.cwi.nl/reo/channels" nsPrefix="channels">
+    <eClassifiers xsi:type="ecore:EClass" name="Channel" abstract="true" eSuperTypes="#//Primitive">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="channelEndOne" eType="#//PrimitiveEnd"
+          changeable="false" volatile="true" transient="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="channelEndTwo" eType="#//PrimitiveEnd"
+          changeable="false" volatile="true" transient="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="nodeOne" eType="#//Node"
+          volatile="true" transient="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="nodeTwo" eType="#//Node"
+          volatile="true" transient="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="channelEndNameOne" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          volatile="true" transient="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="channelEndNameTwo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          volatile="true" transient="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DirectedChannel" abstract="true" eSuperTypes="#//channels/Channel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sourceEnd" eType="#//SourceEnd"
+          volatile="true" transient="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sinkEnd" eType="#//SinkEnd"
+          volatile="true" transient="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DrainChannel" abstract="true" eSuperTypes="#//channels/Channel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sourceEndOne" eType="#//SourceEnd"
+          volatile="true" transient="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sourceEndTwo" eType="#//SourceEnd"
+          volatile="true" transient="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SpoutChannel" abstract="true" eSuperTypes="#//channels/Channel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sinkEndOne" eType="#//SinkEnd"
+          volatile="true" transient="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sinkEndTwo" eType="#//SinkEnd"
+          volatile="true" transient="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Sync" eSuperTypes="#//channels/DirectedChannel"/>
+    <eClassifiers xsi:type="ecore:EClass" name="LossySync" eSuperTypes="#//channels/DirectedChannel"/>
+    <eClassifiers xsi:type="ecore:EClass" name="FIFO" eSuperTypes="#//channels/DirectedChannel">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="full" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cellName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LossyFIFO" eSuperTypes="#//channels/DirectedChannel">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="shift" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="full" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cellName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SyncDrain" eSuperTypes="#//channels/DrainChannel #//DataAware"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AsyncDrain" eSuperTypes="#//channels/DrainChannel"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SyncSpout" eSuperTypes="#//channels/SpoutChannel"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AsyncSpout" eSuperTypes="#//channels/SpoutChannel"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Filter" eSuperTypes="#//channels/DirectedChannel #//DataAware"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Transform" eSuperTypes="#//channels/DirectedChannel #//DataAware"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Timer" eSuperTypes="#//channels/DirectedChannel">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeout" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CustomDirectedChannel" eSuperTypes="#//channels/DirectedChannel #//Nameable #//CustomPrimitive"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CustomDrainChannel" eSuperTypes="#//channels/DrainChannel #//Nameable #//CustomPrimitive"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CustomSpoutChannel" eSuperTypes="#//channels/SpoutChannel #//Nameable #//CustomPrimitive"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PrioritySync" eSuperTypes="#//channels/DirectedChannel"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BlockingSourceSync" eSuperTypes="#//channels/DirectedChannel"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BlockingSinkSync" eSuperTypes="#//channels/DirectedChannel"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BlockingSync" eSuperTypes="#//channels/DirectedChannel"/>
+  </eSubpackages>
+  <eSubpackages name="colouring" nsURI="http://www.cwi.nl/reo/colouring" nsPrefix="colouring">
+    <eClassifiers xsi:type="ecore:EEnum" name="FlowColour">
+      <eLiterals name="FLOW" literal="---"/>
+      <eLiterals name="NO_FLOW" value="1" literal="-!-"/>
+      <eLiterals name="NO_FLOW_GIVE_REASON" value="2" literal="->-"/>
+      <eLiterals name="NO_FLOW_REQUIRE_REASON" value="3" literal="-&lt;-"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Colouring">
+      <eOperations name="join" eType="#//colouring/Colouring">
+        <eParameters name="function" eType="#//colouring/Colouring"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="colours" ordered="false"
+          upperBound="-1" eType="#//colouring/ColouringEntry" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="nextColouringTable" eType="#//colouring/ColouringTable"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parts" ordered="false"
+          upperBound="-1" eType="#//colouring/Colouring" transient="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ColouringTable" eSuperTypes="#//Nameable">
+      <eOperations name="join">
+        <eParameters name="table" eType="#//colouring/ColouringTable"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="colourings" upperBound="-1"
+          eType="#//colouring/Colouring" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="colours" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="3"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Colourable" abstract="true" interface="true">
+      <eOperations name="getColouringTable" eType="#//colouring/ColouringTable"/>
+      <eOperations name="usesFlipRule" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ColouringEntry" instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="#//PrimitiveEnd"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//colouring/FlowColour"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="ColouringEngine" instanceClassName="org.ect.reo.colouring.ColouringEngine"/>
+  </eSubpackages>
+  <eSubpackages name="animation" nsURI="http://www.cwi.nl/reo/animation" nsPrefix="animation">
+    <eClassifiers xsi:type="ecore:EClass" name="Animatable" abstract="true" interface="true"
+        eSuperTypes="#//colouring/Colourable">
+      <eOperations name="getAnimationTable" eType="#//animation/AnimationTable"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Animation" eSuperTypes="#//colouring/Colouring">
+      <eOperations name="merge" eType="#//animation/Animation">
+        <eParameters name="animation" eType="#//animation/Animation"/>
+      </eOperations>
+      <eOperations name="append" eType="#//animation/Animation">
+        <eParameters name="animation" eType="#//animation/Animation"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="steps" upperBound="-1"
+          eType="#//animation/AnimationStep" containment="true" eOpposite="#//animation/AnimationStep/animation"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AnimationTable" eSuperTypes="#//colouring/ColouringTable"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AnimationStep" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="activeEnds" upperBound="-1"
+          eType="#//PrimitiveEnd"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="animation" eType="#//animation/Animation"
+          eOpposite="#//animation/Animation/steps"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CreateStep" eSuperTypes="#//animation/AnimationStep"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SendStep" eSuperTypes="#//animation/AnimationStep"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ReceiveStep" eSuperTypes="#//animation/AnimationStep"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ReplicateStep" eSuperTypes="#//animation/AnimationStep"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DestroyStep" eSuperTypes="#//animation/AnimationStep"/>
+  </eSubpackages>
+  <eSubpackages name="components" nsURI="http://www.cwi.nl/reo/components" nsPrefix="components">
+    <eClassifiers xsi:type="ecore:EClass" name="Reader" eSuperTypes="#//components/SingleEndComponent">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sourceEnd" eType="#//SourceEnd"
+          volatile="true" transient="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Writer" eSuperTypes="#//components/SingleEndComponent">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sinkEnd" eType="#//SinkEnd"
+          volatile="true" transient="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SingleEndComponent" abstract="true"
+        eSuperTypes="#//Component #//DataAware">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="end" eType="#//PrimitiveEnd"
+          changeable="false" volatile="true" transient="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="requests" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          volatile="true" transient="true" defaultValueLiteral="1"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

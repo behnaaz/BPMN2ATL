@@ -11,7 +11,7 @@ helper context BPMN20!FlowElement def: isExpanded(): Boolean =
 
 rule def2mod {
 	from
-		b: BPMN20!Definitions(true)
+		b: BPMN20!Definitions
 	to
 		m: reo!Module(			connectors <- 
 			--b.rootElements		
