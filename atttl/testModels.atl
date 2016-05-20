@@ -1,6 +1,6 @@
 module testModels;-- @path reo=/atttl/Reo/reo.ecore
 -- @path BPMN20=/atttl/BPMN2/BPMN20.ecore
-create OUT: reo from IN: BPMN20;
+create OUT: Reo, gmf : GMF from IN: BPMN20;
 
 helper context BPMN20!FlowElement def: isExpanded(): Boolean =
 	if (self.oclIsKindOf(BPMN20!SubProcess)) then
@@ -16,7 +16,12 @@ rule def2mod {
 		m: reo!Module(			connectors <- 
 			--b.rootElements		
 		BPMN20!Process.allInstances()	
-		)
+		),
+		m : GMF!Diagram(
+			type<-'Reo',
+			name<-'test',
+			measurementUnit<-#Pixel
+		)	
 	do {
 		b.debug('definition to module > ' + BPMN20!Process.allInstances()); 
 	}
